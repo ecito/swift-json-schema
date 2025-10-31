@@ -704,4 +704,149 @@ import Testing
       macros: testMacros
     )
   }
+
+  @Test func customStringRawValues() {
+    assertMacroExpansion(
+      """
+      @Schemable
+      enum Status: String {
+        case active = "ACTIVE"
+        case inactive = "INACTIVE"
+        case pending = "PENDING"
+      }
+      """,
+      expandedSource: """
+        enum Status: String {
+          case active = "ACTIVE"
+          case inactive = "INACTIVE"
+          case pending = "PENDING"
+
+          static var schema: some JSONSchemaComponent<Status> {
+            JSONString()
+              .enumValues {
+                "ACTIVE"
+                "INACTIVE"
+                "PENDING"
+              }
+              .compactMap {
+                switch $0 {
+                case "ACTIVE":
+                  return Self.active
+                case "INACTIVE":
+                  return Self.inactive
+                case "PENDING":
+                  return Self.pending
+                default:
+                  return nil
+                }
+              }
+          }
+        }
+
+        extension Status: Schemable {
+        }
+        """,
+      macros: testMacros
+    )
+  }
+
+  @Test func mixedCustomAndDefaultRawValues() {
+    assertMacroExpansion(
+      """
+      @Schemable
+      enum Priority: String {
+        case low
+        case medium = "MEDIUM"
+        case high = "HIGH"
+        case critical
+      }
+      """,
+      expandedSource: """
+        enum Priority: String {
+          case low
+          case medium = "MEDIUM"
+          case high = "HIGH"
+          case critical
+
+          static var schema: some JSONSchemaComponent<Priority> {
+            JSONString()
+              .enumValues {
+                "low"
+                "MEDIUM"
+                "HIGH"
+                "critical"
+              }
+              .compactMap {
+                switch $0 {
+                case "low":
+                  return Self.low
+                case "MEDIUM":
+                  return Self.medium
+                case "HIGH":
+                  return Self.high
+                case "critical":
+                  return Self.critical
+                default:
+                  return nil
+                }
+              }
+          }
+        }
+
+        extension Priority: Schemable {
+        }
+        """,
+      macros: testMacros
+    )
+  }
+
+  @Test func backtickedCasesWithCustomRawValues() {
+    assertMacroExpansion(
+      """
+      @Schemable
+      enum HTTPMethod: String {
+        case `get` = "GET"
+        case `post` = "POST"
+        case `delete`
+        case patch = "PATCH"
+      }
+      """,
+      expandedSource: """
+        enum HTTPMethod: String {
+          case `get` = "GET"
+          case `post` = "POST"
+          case `delete`
+          case patch = "PATCH"
+
+          static var schema: some JSONSchemaComponent<HTTPMethod> {
+            JSONString()
+              .enumValues {
+                "GET"
+                "POST"
+                "delete"
+                "PATCH"
+              }
+              .compactMap {
+                switch $0 {
+                case "GET":
+                  return Self.`get`
+                case "POST":
+                  return Self.`post`
+                case "delete":
+                  return Self.`delete`
+                case "PATCH":
+                  return Self.patch
+                default:
+                  return nil
+                }
+              }
+          }
+        }
+
+        extension HTTPMethod: Schemable {
+        }
+        """,
+      macros: testMacros
+    )
+  }
 }
