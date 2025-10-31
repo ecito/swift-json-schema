@@ -1156,4 +1156,171 @@ struct SchemableExpansionTests {
       macros: testMacros
     )
   }
+
+  @Test(arguments: ["struct", "class"]) func customCodingKeys(declarationType: String) {
+    assertMacroExpansion(
+      """
+      @Schemable
+      \(declarationType) Person {
+        let firstName: String
+        let lastName: String
+        let emailAddress: String
+
+        enum CodingKeys: String, CodingKey {
+          case firstName = "first_name"
+          case lastName = "last_name"
+          case emailAddress = "email"
+        }
+      }
+      """,
+      expandedSource: """
+        \(declarationType) Person {
+          let firstName: String
+          let lastName: String
+          let emailAddress: String
+
+          enum CodingKeys: String, CodingKey {
+            case firstName = "first_name"
+            case lastName = "last_name"
+            case emailAddress = "email"
+          }
+
+          static var schema: some JSONSchemaComponent<Person> {
+            JSONSchema(Person.init) {
+              JSONObject {
+                JSONProperty(key: "first_name") {
+                  JSONString()
+                }
+                .required()
+                JSONProperty(key: "last_name") {
+                  JSONString()
+                }
+                .required()
+                JSONProperty(key: "email") {
+                  JSONString()
+                }
+                .required()
+              }
+            }
+          }
+        }
+
+        extension Person: Schemable {
+        }
+        """,
+      macros: testMacros
+    )
+  }
+
+  @Test(arguments: ["struct", "class"]) func customCodingKeysWithSchemaOptionsOverride(
+    declarationType: String
+  ) {
+    assertMacroExpansion(
+      """
+      @Schemable
+      \(declarationType) Person {
+        let firstName: String
+        @SchemaOptions(.key("surname"))
+        let lastName: String
+
+        enum CodingKeys: String, CodingKey {
+          case firstName = "first_name"
+          case lastName = "last_name"
+        }
+      }
+      """,
+      expandedSource: """
+        \(declarationType) Person {
+          let firstName: String
+          @SchemaOptions(.key("surname"))
+          let lastName: String
+
+          enum CodingKeys: String, CodingKey {
+            case firstName = "first_name"
+            case lastName = "last_name"
+          }
+
+          static var schema: some JSONSchemaComponent<Person> {
+            JSONSchema(Person.init) {
+              JSONObject {
+                JSONProperty(key: "first_name") {
+                  JSONString()
+                }
+                .required()
+                JSONProperty(key: "surname") {
+                  JSONString()
+                }
+                .required()
+              }
+            }
+          }
+        }
+
+        extension Person: Schemable {
+        }
+        """,
+      macros: testMacros
+    )
+  }
+
+  @Test(arguments: ["struct", "class"]) func customCodingKeysWithKeyStrategy(
+    declarationType: String
+  ) {
+    assertMacroExpansion(
+      """
+      @Schemable(keyStrategy: .snakeCase)
+      \(declarationType) Person {
+        let firstName: String
+        let middleName: String
+        let lastName: String
+
+        enum CodingKeys: String, CodingKey {
+          case firstName = "given_name"
+          case middleName
+          case lastName = "family_name"
+        }
+      }
+      """,
+      expandedSource: """
+        \(declarationType) Person {
+          let firstName: String
+          let middleName: String
+          let lastName: String
+
+          enum CodingKeys: String, CodingKey {
+            case firstName = "given_name"
+            case middleName
+            case lastName = "family_name"
+          }
+
+          static var schema: some JSONSchemaComponent<Person> {
+            JSONSchema(Person.init) {
+              JSONObject {
+                JSONProperty(key: "given_name") {
+                  JSONString()
+                }
+                .required()
+                JSONProperty(key: "middleName") {
+                  JSONString()
+                }
+                .required()
+                JSONProperty(key: "family_name") {
+                  JSONString()
+                }
+                .required()
+              }
+            }
+          }
+
+          static var keyEncodingStrategy: KeyEncodingStrategies {
+            .snakeCase
+          }
+        }
+
+        extension Person: Schemable {
+        }
+        """,
+      macros: testMacros
+    )
+  }
 }
