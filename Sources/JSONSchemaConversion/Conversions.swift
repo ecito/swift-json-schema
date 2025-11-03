@@ -9,4 +9,6 @@ public enum Conversions {
   public static let time = TimeConversion.self
 
   public static let url = URLConversion.self
+
+  public static let range = RangeConversion.self
 }
