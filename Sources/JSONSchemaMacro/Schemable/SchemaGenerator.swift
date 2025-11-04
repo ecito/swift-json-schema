@@ -57,6 +57,7 @@ struct EnumSchemaGenerator {
     }
 
     let variableDecl: DeclSyntax = """
+      @available(macOS 14.0, iOS 17.0, watchOS 10.0, tvOS 17.0, *)
       \(declModifier)static var schema: some JSONSchemaComponent<\(name)> {
         \(codeBlockItem)
       }
@@ -205,6 +206,7 @@ struct SchemaGenerator {
     }
 
     let variableDecl: DeclSyntax = """
+      @available(macOS 14.0, iOS 17.0, watchOS 10.0, tvOS 17.0, *)
       \(declModifier)static var schema: some JSONSchemaComponent<\(name)> {
         JSONSchema(\(name).init) { \(codeBlockItem) }
       }
