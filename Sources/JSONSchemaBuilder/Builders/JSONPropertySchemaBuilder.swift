@@ -53,31 +53,20 @@ public struct PropertyTuple<each Property: JSONPropertyComponent>: PropertyColle
 
   public var schemaValue: SchemaValue {
     var output = SchemaValue.object([:])
-    #if swift(>=6)
-      for property in repeat each property where !property.key.isEmpty {
-
-        output[property.key] = .object(property.value.schemaValue)
-      }
-    #else
-      func schemaForProperty<Prop: JSONPropertyComponent>(_ property: Prop) {
-        guard !property.key.isEmpty else { return }
-        output[property.key] = property.value.schemaValue.value
-      }
-      repeat schemaForProperty(each property)
-    #endif
+    func schemaForProperty<Prop: JSONPropertyComponent>(_ property: Prop) {
+      guard !property.key.isEmpty else { return }
+      output[property.key] = property.value.schemaValue.value
+    }
+    repeat schemaForProperty(each property)
     return output
   }
 
   public var requiredKeys: [String] {
     var keys = [String]()
-    #if swift(>=6)
-      for property in repeat each property where property.isRequired { keys.append(property.key) }
-    #else
-      func addKeyIfRequired<Prop: JSONPropertyComponent>(_ property: Prop) {
-        if property.isRequired { keys.append(property.key) }
-      }
-      repeat addKeyIfRequired(each property)
-    #endif
+    func addKeyIfRequired<Prop: JSONPropertyComponent>(_ property: Prop) {
+      if property.isRequired { keys.append(property.key) }
+    }
+    repeat addKeyIfRequired(each property)
     return keys
   }
 
