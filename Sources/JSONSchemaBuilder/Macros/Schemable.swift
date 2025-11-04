@@ -2,7 +2,9 @@
 @attached(member, names: named(schema), named(keyEncodingStrategy))
 public macro Schemable(
   keyStrategy: KeyEncodingStrategies? = nil,
-  optionalNulls: Bool = false
+  optionalNulls: Bool = false,
+  module: String? = nil,
+  useGlobalConfig: Bool = false
 ) = #externalMacro(module: "JSONSchemaMacro", type: "SchemableMacro")
 
 public protocol Schemable {

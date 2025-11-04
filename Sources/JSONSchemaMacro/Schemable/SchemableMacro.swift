@@ -93,11 +93,31 @@ public struct SchemableMacro: MemberMacro, ExtensionMacro {
       let arguments = node.arguments?.as(LabeledExprListSyntax.self)
       let strategyArg = arguments?.first(where: { $0.label?.text == "keyStrategy" })?.expression
       let optionalNullsArg = arguments?.first(where: { $0.label?.text == "optionalNulls" })?.expression
+      let moduleArg = arguments?.first(where: { $0.label?.text == "module" })?.expression
+      let useGlobalConfigArg = arguments?.first(where: { $0.label?.text == "useGlobalConfig" })?.expression
+
+      // Parse optionalNulls as boolean (explicit true or false)
       let optionalNulls = optionalNullsArg?.as(BooleanLiteralExprSyntax.self)?.literal.text == "true"
+
+      // Parse useGlobalConfig flag
+      let useGlobalConfig = useGlobalConfigArg?.as(BooleanLiteralExprSyntax.self)?.literal.text == "true"
+
+      // Parse module name (defaults to "default" if not specified)
+      let moduleName: String
+      if let stringLiteral = moduleArg?.as(StringLiteralExprSyntax.self),
+         let segment = stringLiteral.segments.first,
+         case .stringSegment(let stringSegment) = segment {
+        moduleName = stringSegment.content.text
+      } else {
+        moduleName = "default"
+      }
+
       let generator = SchemaGenerator(
         fromStruct: structDecl,
         keyStrategy: strategyArg,
         optionalNulls: optionalNulls,
+        useGlobalConfig: useGlobalConfig,
+        module: moduleName,
         accessLevel: accessLevel
       )
       let schemaDecl = generator.makeSchema()
@@ -113,11 +133,31 @@ public struct SchemableMacro: MemberMacro, ExtensionMacro {
       let arguments = node.arguments?.as(LabeledExprListSyntax.self)
       let strategyArg = arguments?.first(where: { $0.label?.text == "keyStrategy" })?.expression
       let optionalNullsArg = arguments?.first(where: { $0.label?.text == "optionalNulls" })?.expression
+      let moduleArg = arguments?.first(where: { $0.label?.text == "module" })?.expression
+      let useGlobalConfigArg = arguments?.first(where: { $0.label?.text == "useGlobalConfig" })?.expression
+
+      // Parse optionalNulls as boolean (explicit true or false)
       let optionalNulls = optionalNullsArg?.as(BooleanLiteralExprSyntax.self)?.literal.text == "true"
+
+      // Parse useGlobalConfig flag
+      let useGlobalConfig = useGlobalConfigArg?.as(BooleanLiteralExprSyntax.self)?.literal.text == "true"
+
+      // Parse module name (defaults to "default" if not specified)
+      let moduleName: String
+      if let stringLiteral = moduleArg?.as(StringLiteralExprSyntax.self),
+         let segment = stringLiteral.segments.first,
+         case .stringSegment(let stringSegment) = segment {
+        moduleName = stringSegment.content.text
+      } else {
+        moduleName = "default"
+      }
+
       let generator = SchemaGenerator(
         fromClass: classDecl,
         keyStrategy: strategyArg,
         optionalNulls: optionalNulls,
+        useGlobalConfig: useGlobalConfig,
+        module: moduleName,
         accessLevel: accessLevel
       )
       let schemaDecl = generator.makeSchema()

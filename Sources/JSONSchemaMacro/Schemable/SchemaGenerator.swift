@@ -102,11 +102,15 @@ struct SchemaGenerator {
   let attributes: AttributeListSyntax
   let keyStrategy: ExprSyntax?
   let optionalNulls: Bool
+  let useGlobalConfig: Bool
+  let module: String
 
   init(
     fromClass classDecl: ClassDeclSyntax,
     keyStrategy: ExprSyntax?,
     optionalNulls: Bool = false,
+    useGlobalConfig: Bool = false,
+    module: String = "default",
     accessLevel: String? = nil
   ) {
     // Use provided access level if available, otherwise use the declaration's modifier
@@ -124,12 +128,16 @@ struct SchemaGenerator {
     attributes = classDecl.attributes
     self.keyStrategy = keyStrategy
     self.optionalNulls = optionalNulls
+    self.useGlobalConfig = useGlobalConfig
+    self.module = module
   }
 
   init(
     fromStruct structDecl: StructDeclSyntax,
     keyStrategy: ExprSyntax?,
     optionalNulls: Bool = false,
+    useGlobalConfig: Bool = false,
+    module: String = "default",
     accessLevel: String? = nil
   ) {
     // Use provided access level if available, otherwise use the declaration's modifier
@@ -147,6 +155,8 @@ struct SchemaGenerator {
     attributes = structDecl.attributes
     self.keyStrategy = keyStrategy
     self.optionalNulls = optionalNulls
+    self.useGlobalConfig = useGlobalConfig
+    self.module = module
   }
 
   func makeSchema() -> DeclSyntax {
@@ -156,7 +166,9 @@ struct SchemaGenerator {
       $0.generateSchema(
         keyStrategy: keyStrategy,
         typeName: name.text,
-        globalOptionalNulls: optionalNulls
+        globalOptionalNulls: optionalNulls,
+        useGlobalConfig: useGlobalConfig,
+        module: module
       )
     }
 

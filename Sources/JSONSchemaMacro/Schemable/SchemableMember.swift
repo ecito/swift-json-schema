@@ -50,7 +50,9 @@ struct SchemableMember {
   func generateSchema(
     keyStrategy: ExprSyntax?,
     typeName: String,
-    globalOptionalNulls: Bool = false
+    globalOptionalNulls: Bool = false,
+    useGlobalConfig: Bool = false,
+    module: String = "default"
   ) -> CodeBlockItemSyntax? {
     var codeBlock: CodeBlockItemSyntax
     switch type.typeInformation() {
@@ -122,16 +124,17 @@ struct SchemableMember {
 
     // Apply .orNull() if this is an optional property and:
     // 1. It has an explicit @SchemaOptions(.orNull(style:)) annotation, OR
-    // 2. The global optionalNulls flag is true
+    // 2. The global optionalNulls flag is true, OR
+    // 3. useGlobalConfig is true (check runtime config)
     if type.isOptional {
       if let orNullStyle {
-        // Explicit per-property annotation
+        // Priority 1: Explicit per-property annotation
         codeBlock = """
           \(codeBlock)
           .orNull(style: \(orNullStyle))
           """
       } else if globalOptionalNulls {
-        // Global flag - use .type for primitives, .union for complex types
+        // Priority 2: Explicit type-level configuration (true)
         let typeInfo = type.typeInformation()
         let style: String
         switch typeInfo {
@@ -149,7 +152,22 @@ struct SchemableMember {
           \(codeBlock)
           .orNull(style: \(raw: style))
           """
+      } else if useGlobalConfig {
+        // Priority 3: Check runtime global/module config
+        let typeInfo = type.typeInformation()
+        let isScalar: Bool
+        switch typeInfo {
+        case .primitive(let primitive, _):
+          isScalar = primitive.isScalar
+        case .schemable, .notSupported:
+          isScalar = false
+        }
+        codeBlock = """
+          \(codeBlock)
+          .orNullIfConfigured(module: \"\(raw: module)\", isScalar: \(raw: isScalar))
+          """
       }
+      // If globalOptionalNulls is false and useGlobalConfig is false, don't apply .orNull()
     }
 
     let keyExpr: ExprSyntax

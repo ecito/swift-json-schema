@@ -10,7 +10,7 @@ public protocol KeyEncodingStrategy {
 ///
 /// This type provides static access to various key encoding strategies and allows
 /// for custom strategy implementations.
-public struct KeyEncodingStrategies {
+public struct KeyEncodingStrategies: @unchecked Sendable {
   private let strategy: any KeyEncodingStrategy.Type
 
   private init(_ strategy: any KeyEncodingStrategy.Type) {
