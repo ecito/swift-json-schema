@@ -48,7 +48,7 @@ struct InitializerDiagnostics {
   /// Gets all stored properties including those marked with @ExcludeFromSchema
   private func getAllStoredProperties() -> [(name: String, type: String)] {
     members.compactMap { $0.decl.as(VariableDeclSyntax.self) }
-      .filter { !$0.isStatic }
+      .filter { !$0.modifiers.contains { $0.name.text == "static" } }
       .flatMap { variableDecl in
         variableDecl.bindings.compactMap { binding -> (String, String)? in
           guard let identifier = binding.pattern.as(IdentifierPatternSyntax.self)?.identifier,

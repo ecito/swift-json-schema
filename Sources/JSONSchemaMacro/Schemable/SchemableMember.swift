@@ -49,7 +49,6 @@ struct SchemableMember {
     )
   }
 
-<<<<<<< HEAD
   /// Validates schema options and emits diagnostics for invalid configurations
   func validateOptions(context: any MacroExpansionContext) {
     let diagnostics = SchemaOptionsDiagnostics(
