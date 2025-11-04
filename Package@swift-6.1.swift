@@ -1,4 +1,4 @@
-// swift-tools-version: 6.0
+// swift-tools-version: 6.1
 
 import PackageDescription
 import CompilerPluginSupport
@@ -30,6 +30,12 @@ let package = Package(
       name: "JSONSchemaConversion",
       targets: ["JSONSchemaConversion"]
     ),
+  ],
+  traits: [
+    .trait(
+      name: "OptionalNulls",
+      description: "Enable automatic null acceptance for all optional properties in @Schemable types"
+    )
   ],
   dependencies: [
     .package(url: "https://github.com/swiftlang/swift-docc-plugin", from: "1.0.0"),

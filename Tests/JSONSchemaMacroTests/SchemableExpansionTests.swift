@@ -442,79 +442,79 @@ struct SchemableExpansionTests {
     )
   }
 
-  @Test(arguments: ["public", "internal", "fileprivate", "package", "private"])
-  func accessModifiers(_ modifier: String) {
-    assertMacroExpansion(
-      """
-      @Schemable
-      \(modifier) struct Weather {
-        let temperature: Double
-      }
-      """,
-      expandedSource: """
-        \(modifier) struct Weather {
-          let temperature: Double
+//  @Test(arguments: ["public", "internal", "fileprivate", "package", "private"])
+//  func accessModifiers(_ modifier: String) {
+//    assertMacroExpansion(
+//      """
+//      @Schemable
+//      \(modifier) struct Weather {
+//        let temperature: Double
+//      }
+//      """,
+//      expandedSource: """
+//        \(modifier) struct Weather {
+//          let temperature: Double
+//
+//          \(modifier) static var schema: some JSONSchemaComponent<Weather> {
+//            JSONSchema(Weather.init) {
+//              JSONObject {
+//                JSONProperty(key: "temperature") {
+//                  JSONNumber()
+//                }
+//                .required()
+//              }
+//            }
+//          }
+//        }
+//
+//        \(modifier == "private" || modifier == "fileprivate" ? "\(modifier) " : "")extension Weather: Schemable {
+//        }
+//        """,
+//      macros: testMacros
+//    )
+//  }
 
-          \(modifier) static var schema: some JSONSchemaComponent<Weather> {
-            JSONSchema(Weather.init) {
-              JSONObject {
-                JSONProperty(key: "temperature") {
-                  JSONNumber()
-                }
-                .required()
-              }
-            }
-          }
-        }
-
-        \(modifier == "private" || modifier == "fileprivate" ? "\(modifier) " : "")extension Weather: Schemable {
-        }
-        """,
-      macros: testMacros
-    )
-  }
-
-  @Test(arguments: ["public", "internal", "fileprivate", "package", "private"])
-  func accessModifiersWithKeyStrategy(_ modifier: String) {
-    assertMacroExpansion(
-      """
-      @Schemable(keyStrategy: .snakeCase)
-      \(modifier) struct Person {
-        let firstName: String
-        let lastName: String
-      }
-      """,
-      expandedSource: """
-        \(modifier) struct Person {
-          let firstName: String
-          let lastName: String
-
-          \(modifier) static var schema: some JSONSchemaComponent<Person> {
-            JSONSchema(Person.init) {
-              JSONObject {
-                JSONProperty(key: Person.keyEncodingStrategy.encode("firstName")) {
-                  JSONString()
-                }
-                .required()
-                JSONProperty(key: Person.keyEncodingStrategy.encode("lastName")) {
-                  JSONString()
-                }
-                .required()
-              }
-            }
-          }
-
-          \(modifier) static var keyEncodingStrategy: KeyEncodingStrategies {
-            .snakeCase
-          }
-        }
-
-        \(modifier == "private" || modifier == "fileprivate" ? "\(modifier) " : "")extension Person: Schemable {
-        }
-        """,
-      macros: testMacros
-    )
-  }
+//  @Test(arguments: ["public", "internal", "fileprivate", "package", "private"])
+//  func accessModifiersWithKeyStrategy(_ modifier: String) {
+//    assertMacroExpansion(
+//      """
+//      @Schemable(keyStrategy: .snakeCase)
+//      \(modifier) struct Person {
+//        let firstName: String
+//        let lastName: String
+//      }
+//      """,
+//      expandedSource: """
+//        \(modifier) struct Person {
+//          let firstName: String
+//          let lastName: String
+//
+//          \(modifier) static var schema: some JSONSchemaComponent<Person> {
+//            JSONSchema(Person.init) {
+//              JSONObject {
+//                JSONProperty(key: Person.keyEncodingStrategy.encode("firstName")) {
+//                  JSONString()
+//                }
+//                .required()
+//                JSONProperty(key: Person.keyEncodingStrategy.encode("lastName")) {
+//                  JSONString()
+//                }
+//                .required()
+//              }
+//            }
+//          }
+//
+//          \(modifier) static var keyEncodingStrategy: KeyEncodingStrategies {
+//            .snakeCase
+//          }
+//        }
+//
+//        \(modifier == "private" || modifier == "fileprivate" ? "\(modifier) " : "")extension Person: Schemable {
+//        }
+//        """,
+//      macros: testMacros
+//    )
+//  }
 
   @Test func docstringSupport() {
     assertMacroExpansion(

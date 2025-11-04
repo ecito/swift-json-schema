@@ -476,3 +476,36 @@ The `.orNull()` modifier supports two styles:
 - `.union`: Uses oneOf composition - required for complex types (objects, arrays)
 
 When using the global `optionalNulls` flag, the appropriate style is automatically selected based on the property type.
+
+**Package-level opt-in (Swift 6.0+):**
+
+When using Swift 6.0 or later, you can enable null acceptance for all optional properties across your entire package using the `OptionalNulls` trait:
+
+```swift
+// In your Package.swift
+dependencies: [
+  .package(url: "https://github.com/ajevans99/swift-json-schema.git", from: "0.15.0",
+           traits: [.init(name: "OptionalNulls")])
+]
+```
+
+With this trait enabled, all `@Schemable` types will behave as if `optionalNulls: true` was specified, eliminating the need to add the parameter to every type definition:
+
+```swift
+// When OptionalNulls trait is enabled:
+@Schemable
+struct User {
+  let name: String
+  let age: Int?      // Automatically accepts null
+  let email: String? // Automatically accepts null
+}
+
+// You can still override per-type:
+@Schemable(optionalNulls: false)
+struct StrictUser {
+  let name: String
+  let age: Int?      // Does NOT accept null
+}
+```
+
+This is particularly useful for projects that consistently want to accept explicit `null` values for optional properties without having to specify `optionalNulls: true` on every type.

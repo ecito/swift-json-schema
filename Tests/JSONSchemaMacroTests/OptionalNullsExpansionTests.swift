@@ -653,4 +653,23 @@ struct OptionalNullsExpansionTests {
       macros: testMacros
     )
   }
+
+  // MARK: - Trait-based configuration
+  //
+  // The OptionalNulls trait provides package-level configuration for automatic null acceptance.
+  // When the OptionalNulls trait is enabled in a client package's dependency declaration:
+  //
+  //   .package(url: "...", traits: [.init(name: "OptionalNulls")])
+  //
+  // All @Schemable types in that package will have optionalNulls: true by default.
+  // This means optional properties will automatically accept explicit null values.
+  //
+  // The trait can be overridden per-type:
+  //   @Schemable(optionalNulls: false)  // Explicitly disable even when trait is enabled
+  //   @Schemable(optionalNulls: true)   // Explicitly enable (redundant when trait is active)
+  //
+  // Note: Macro expansion tests cannot verify trait behavior since traits are evaluated
+  // at macro compilation time, not during test macro expansion. Integration tests in
+  // JSONSchemaIntegrationTests verify the actual trait behavior when the package is compiled
+  // with the OptionalNulls trait enabled.
 }

@@ -94,8 +94,17 @@ public struct SchemableMacro: MemberMacro, ExtensionMacro {
       let strategyArg = arguments?.first(where: { $0.label?.text == "keyStrategy" })?.expression
       let optionalNullsArg = arguments?.first(where: { $0.label?.text == "optionalNulls" })?
         .expression
-      let optionalNulls =
+
+      // Check for explicit optionalNulls argument
+      let explicitOptionalNulls =
         optionalNullsArg?.as(BooleanLiteralExprSyntax.self)?.literal.text == "true"
+
+      // Use trait if available, otherwise fall back to explicit argument
+      #if OptionalNulls
+      let optionalNulls = optionalNullsArg == nil ? true : explicitOptionalNulls
+      #else
+      let optionalNulls = explicitOptionalNulls
+      #endif
       let generator = SchemaGenerator(
         fromStruct: structDecl,
         keyStrategy: strategyArg,
@@ -116,8 +125,17 @@ public struct SchemableMacro: MemberMacro, ExtensionMacro {
       let strategyArg = arguments?.first(where: { $0.label?.text == "keyStrategy" })?.expression
       let optionalNullsArg = arguments?.first(where: { $0.label?.text == "optionalNulls" })?
         .expression
-      let optionalNulls =
+
+      // Check for explicit optionalNulls argument
+      let explicitOptionalNulls =
         optionalNullsArg?.as(BooleanLiteralExprSyntax.self)?.literal.text == "true"
+
+      // Use trait if available, otherwise fall back to explicit argument
+      #if OptionalNulls
+      let optionalNulls = optionalNullsArg == nil ? true : explicitOptionalNulls
+      #else
+      let optionalNulls = explicitOptionalNulls
+      #endif
       let generator = SchemaGenerator(
         fromClass: classDecl,
         keyStrategy: strategyArg,
