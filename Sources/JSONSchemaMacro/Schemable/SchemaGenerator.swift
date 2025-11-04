@@ -1,5 +1,7 @@
+import SwiftDiagnostics
 import SwiftSyntax
 import SwiftSyntaxBuilder
+import SwiftSyntaxMacros
 
 struct EnumSchemaGenerator {
   let declModifier: DeclModifierSyntax?
@@ -102,12 +104,14 @@ struct SchemaGenerator {
   let attributes: AttributeListSyntax
   let keyStrategy: ExprSyntax?
   let optionalNulls: Bool
+  let context: (any MacroExpansionContext)?
 
   init(
     fromClass classDecl: ClassDeclSyntax,
     keyStrategy: ExprSyntax?,
     optionalNulls: Bool = false,
-    accessLevel: String? = nil
+    accessLevel: String? = nil,
+    context: (any MacroExpansionContext)? = nil
   ) {
     // Use provided access level if available, otherwise use the declaration's modifier
     if let accessLevel {
@@ -124,13 +128,15 @@ struct SchemaGenerator {
     attributes = classDecl.attributes
     self.keyStrategy = keyStrategy
     self.optionalNulls = optionalNulls
+    self.context = context
   }
 
   init(
     fromStruct structDecl: StructDeclSyntax,
     keyStrategy: ExprSyntax?,
     optionalNulls: Bool = false,
-    accessLevel: String? = nil
+    accessLevel: String? = nil,
+    context: (any MacroExpansionContext)? = nil
   ) {
     // Use provided access level if available, otherwise use the declaration's modifier
     if let accessLevel {
@@ -147,16 +153,33 @@ struct SchemaGenerator {
     attributes = structDecl.attributes
     self.keyStrategy = keyStrategy
     self.optionalNulls = optionalNulls
+    self.context = context
   }
 
   func makeSchema() -> DeclSyntax {
     let schemableMembers = members.schemableMembers()
 
+    // Emit diagnostics for potential memberwise init mismatches
+    if let context = context {
+      let diagnostics = InitializerDiagnostics(
+        typeName: name,
+        members: members,
+        context: context
+      )
+      diagnostics.emitDiagnostics(for: schemableMembers)
+
+      // Validate schema options for each member
+      for member in schemableMembers {
+        member.validateOptions(context: context)
+      }
+    }
+
     let statements = schemableMembers.compactMap {
       $0.generateSchema(
         keyStrategy: keyStrategy,
         typeName: name.text,
-        globalOptionalNulls: optionalNulls
+        globalOptionalNulls: optionalNulls,
+        context: context
       )
     }
 
