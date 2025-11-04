@@ -30,7 +30,6 @@ struct SchemableExpansionTests {
           let humidity: Float
 
           @available(macOS 14.0, iOS 17.0, watchOS 10.0, tvOS 17.0, *)
-          @available(macOS 14.0, iOS 17.0, watchOS 10.0, tvOS 17.0, *)
           static var schema: some JSONSchemaComponent<Weather> {
             JSONSchema(Weather.init) {
               JSONObject {
@@ -85,7 +84,6 @@ struct SchemableExpansionTests {
           let temperatureByLocation: [String: Double?]
           let conditionsByLocation: [String: WeatherCondition]
 
-          @available(macOS 14.0, iOS 17.0, watchOS 10.0, tvOS 17.0, *)
           @available(macOS 14.0, iOS 17.0, watchOS 10.0, tvOS 17.0, *)
           static var schema: some JSONSchemaComponent<Weather> {
             JSONSchema(Weather.init) {
@@ -143,7 +141,6 @@ struct SchemableExpansionTests {
           let temperatureByLocation: Dictionary<String, Double?>
 
           @available(macOS 14.0, iOS 17.0, watchOS 10.0, tvOS 17.0, *)
-          @available(macOS 14.0, iOS 17.0, watchOS 10.0, tvOS 17.0, *)
           static var schema: some JSONSchemaComponent<Weather> {
             JSONSchema(Weather.init) {
               JSONObject {
@@ -186,7 +183,6 @@ struct SchemableExpansionTests {
         \(declarationType) Weather {
           let isRaining: Bool?, temperature: Int?, location: String
 
-          @available(macOS 14.0, iOS 17.0, watchOS 10.0, tvOS 17.0, *)
           @available(macOS 14.0, iOS 17.0, watchOS 10.0, tvOS 17.0, *)
           static var schema: some JSONSchemaComponent<Weather> {
             JSONSchema(Weather.init) {
@@ -246,7 +242,6 @@ struct SchemableExpansionTests {
           var isCold: Bool { temperature < 50 }
 
           @available(macOS 14.0, iOS 17.0, watchOS 10.0, tvOS 17.0, *)
-          @available(macOS 14.0, iOS 17.0, watchOS 10.0, tvOS 17.0, *)
           static var schema: some JSONSchemaComponent<Weather> {
             JSONSchema(Weather.init) {
               JSONObject {
@@ -290,7 +285,6 @@ struct SchemableExpansionTests {
           let precipitationAmount: Double? = nil
           let humidity: Float = 0.30
 
-          @available(macOS 14.0, iOS 17.0, watchOS 10.0, tvOS 17.0, *)
           @available(macOS 14.0, iOS 17.0, watchOS 10.0, tvOS 17.0, *)
           static var schema: some JSONSchemaComponent<Weather> {
             JSONSchema(Weather.init) {
@@ -356,7 +350,6 @@ struct SchemableExpansionTests {
           let units: TemperatureType
 
           @available(macOS 14.0, iOS 17.0, watchOS 10.0, tvOS 17.0, *)
-          @available(macOS 14.0, iOS 17.0, watchOS 10.0, tvOS 17.0, *)
           static var schema: some JSONSchemaComponent<Weather> {
             JSONSchema(Weather.init) {
               JSONObject {
@@ -392,7 +385,6 @@ struct SchemableExpansionTests {
           let id: Int
           let name: String
 
-          @available(macOS 14.0, iOS 17.0, watchOS 10.0, tvOS 17.0, *)
           @available(macOS 14.0, iOS 17.0, watchOS 10.0, tvOS 17.0, *)
           static var schema: some JSONSchemaComponent<Item> {
             JSONSchema(Item.init) {
@@ -432,7 +424,6 @@ struct SchemableExpansionTests {
           let lastName: String
 
           @available(macOS 14.0, iOS 17.0, watchOS 10.0, tvOS 17.0, *)
-          @available(macOS 14.0, iOS 17.0, watchOS 10.0, tvOS 17.0, *)
           static var schema: some JSONSchemaComponent<Person> {
             JSONSchema(Person.init) {
               JSONObject {
@@ -448,7 +439,6 @@ struct SchemableExpansionTests {
             }
           }
 
-          @available(macOS 14.0, iOS 17.0, watchOS 10.0, tvOS 17.0, *)
           @available(macOS 14.0, iOS 17.0, watchOS 10.0, tvOS 17.0, *)
           static var keyEncodingStrategy: KeyEncodingStrategies {
             .snakeCase
@@ -584,7 +574,6 @@ struct SchemableExpansionTests {
           let humidity: Float
 
           @available(macOS 14.0, iOS 17.0, watchOS 10.0, tvOS 17.0, *)
-          @available(macOS 14.0, iOS 17.0, watchOS 10.0, tvOS 17.0, *)
           static var schema: some JSONSchemaComponent<Weather> {
             JSONSchema(Weather.init) {
               JSONObject {
@@ -664,7 +653,6 @@ struct SchemableExpansionTests {
           let location: String
 
           @available(macOS 14.0, iOS 17.0, watchOS 10.0, tvOS 17.0, *)
-          @available(macOS 14.0, iOS 17.0, watchOS 10.0, tvOS 17.0, *)
           static var schema: some JSONSchemaComponent<Weather> {
             JSONSchema(Weather.init) {
               JSONObject {
@@ -724,7 +712,6 @@ struct SchemableExpansionTests {
            */
           let location: String
 
-          @available(macOS 14.0, iOS 17.0, watchOS 10.0, tvOS 17.0, *)
           @available(macOS 14.0, iOS 17.0, watchOS 10.0, tvOS 17.0, *)
           static var schema: some JSONSchemaComponent<Weather> {
             JSONSchema(Weather.init) {
@@ -792,7 +779,6 @@ struct SchemableExpansionTests {
           let complexProperty: String
 
           @available(macOS 14.0, iOS 17.0, watchOS 10.0, tvOS 17.0, *)
-          @available(macOS 14.0, iOS 17.0, watchOS 10.0, tvOS 17.0, *)
           static var schema: some JSONSchemaComponent<ComplexDocstring> {
             JSONSchema(ComplexDocstring.init) {
               JSONObject {
@@ -837,7 +823,6 @@ struct SchemableExpansionTests {
           let emotions: [TestEmotion: Int]
           let analysisNotes: String
 
-          @available(macOS 14.0, iOS 17.0, watchOS 10.0, tvOS 17.0, *)
           @available(macOS 14.0, iOS 17.0, watchOS 10.0, tvOS 17.0, *)
           static var schema: some JSONSchemaComponent<TestPerson> {
             JSONSchema(TestPerson.init) {
@@ -892,7 +877,6 @@ struct SchemableExpansionTests {
         struct SimpleStringIntDict {
           let emotions: [String: Int]
 
-          @available(macOS 14.0, iOS 17.0, watchOS 10.0, tvOS 17.0, *)
           @available(macOS 14.0, iOS 17.0, watchOS 10.0, tvOS 17.0, *)
           static var schema: some JSONSchemaComponent<SimpleStringIntDict> {
             JSONSchema(SimpleStringIntDict.init) {
@@ -1122,7 +1106,6 @@ struct SchemableExpansionTests {
             let humidity: Int
 
             @available(macOS 14.0, iOS 17.0, watchOS 10.0, tvOS 17.0, *)
-            @available(macOS 14.0, iOS 17.0, watchOS 10.0, tvOS 17.0, *)
             static var schema: some JSONSchemaComponent<Forecast> {
               JSONSchema(Forecast.init) {
                 JSONObject {
@@ -1139,7 +1122,6 @@ struct SchemableExpansionTests {
             }
           }
 
-          @available(macOS 14.0, iOS 17.0, watchOS 10.0, tvOS 17.0, *)
           @available(macOS 14.0, iOS 17.0, watchOS 10.0, tvOS 17.0, *)
           static var schema: some JSONSchemaComponent<Weather> {
             JSONSchema(Weather.init) {
@@ -1179,7 +1161,6 @@ struct SchemableExpansionTests {
             \(declarationType) Hourly {
               let temperature: Double
 
-              @available(macOS 14.0, iOS 17.0, watchOS 10.0, tvOS 17.0, *)
               @available(macOS 14.0, iOS 17.0, watchOS 10.0, tvOS 17.0, *)
               static var schema: some JSONSchemaComponent<Hourly> {
                 JSONSchema(Hourly.init) {
@@ -1230,7 +1211,6 @@ struct SchemableExpansionTests {
             case emailAddress = "email"
           }
 
-          @available(macOS 14.0, iOS 17.0, watchOS 10.0, tvOS 17.0, *)
           @available(macOS 14.0, iOS 17.0, watchOS 10.0, tvOS 17.0, *)
           static var schema: some JSONSchemaComponent<Person> {
             JSONSchema(Person.init) {
