@@ -31,6 +31,7 @@ struct OptionalNullsExpansionTests {
 
           let email: String?
 
+          @available(macOS 14.0, iOS 17.0, watchOS 10.0, tvOS 17.0, *)
           static var schema: some JSONSchemaComponent<User> {
             JSONSchema(User.init) {
               JSONObject {
@@ -74,6 +75,7 @@ struct OptionalNullsExpansionTests {
           let tags: [String]?
           let metadata: [String: String]?
 
+          @available(macOS 14.0, iOS 17.0, watchOS 10.0, tvOS 17.0, *)
           static var schema: some JSONSchemaComponent<Product> {
             JSONSchema(Product.init) {
               JSONObject {
@@ -125,6 +127,7 @@ struct OptionalNullsExpansionTests {
 
           let description: String?
 
+          @available(macOS 14.0, iOS 17.0, watchOS 10.0, tvOS 17.0, *)
           static var schema: some JSONSchemaComponent<MixedOptionals> {
             JSONSchema(MixedOptionals.init) {
               JSONObject {
@@ -175,6 +178,7 @@ struct OptionalNullsExpansionTests {
           let isRaining: Bool?
           let windSpeed: Float?
 
+          @available(macOS 14.0, iOS 17.0, watchOS 10.0, tvOS 17.0, *)
           static var schema: some JSONSchemaComponent<Weather> {
             JSONSchema(Weather.init) {
               JSONObject {
@@ -228,6 +232,7 @@ struct OptionalNullsExpansionTests {
           let metadata: [String: Int]?
           let relatedProducts: [Product]?
 
+          @available(macOS 14.0, iOS 17.0, watchOS 10.0, tvOS 17.0, *)
           static var schema: some JSONSchemaComponent<Product> {
             JSONSchema(Product.init) {
               JSONObject {
@@ -290,6 +295,7 @@ struct OptionalNullsExpansionTests {
           let metadata: [String: String]?
           let active: Bool?
 
+          @available(macOS 14.0, iOS 17.0, watchOS 10.0, tvOS 17.0, *)
           static var schema: some JSONSchemaComponent<MixedTypes> {
             JSONSchema(MixedTypes.init) {
               JSONObject {
@@ -352,6 +358,7 @@ struct OptionalNullsExpansionTests {
           let required: String
           let optional: Int?
 
+          @available(macOS 14.0, iOS 17.0, watchOS 10.0, tvOS 17.0, *)
           static var schema: some JSONSchemaComponent<DefaultBehavior> {
             JSONSchema(DefaultBehavior.init) {
               JSONObject {
@@ -401,6 +408,7 @@ struct OptionalNullsExpansionTests {
           let age: Int?
           let tags: [String]?
 
+          @available(macOS 14.0, iOS 17.0, watchOS 10.0, tvOS 17.0, *)
           static var schema: some JSONSchemaComponent<UserProfile> {
             JSONSchema(UserProfile.init) {
               JSONObject {
@@ -446,6 +454,7 @@ struct OptionalNullsExpansionTests {
           let count: Int?
           let score: Double?
 
+          @available(macOS 14.0, iOS 17.0, watchOS 10.0, tvOS 17.0, *)
           static var schema: some JSONSchemaComponent<OverrideTest> {
             JSONSchema(OverrideTest.init) {
               JSONObject {
@@ -486,6 +495,7 @@ struct OptionalNullsExpansionTests {
           let id: Int
           let name: String
 
+          @available(macOS 14.0, iOS 17.0, watchOS 10.0, tvOS 17.0, *)
           static var schema: some JSONSchemaComponent<NoOptionals> {
             JSONSchema(NoOptionals.init) {
               JSONObject {
@@ -525,6 +535,7 @@ struct OptionalNullsExpansionTests {
           let firstName: String?
           let lastName: String?
 
+          @available(macOS 14.0, iOS 17.0, watchOS 10.0, tvOS 17.0, *)
           static var schema: some JSONSchemaComponent<SnakeCaseOptionals> {
             JSONSchema(SnakeCaseOptionals.init) {
               JSONObject {
@@ -568,6 +579,7 @@ struct OptionalNullsExpansionTests {
         struct Container {
           let data: CustomData?
 
+          @available(macOS 14.0, iOS 17.0, watchOS 10.0, tvOS 17.0, *)
           static var schema: some JSONSchemaComponent<Container> {
             JSONSchema(Container.init) {
               JSONObject {
@@ -599,6 +611,7 @@ struct OptionalNullsExpansionTests {
         struct NestedArrays {
           let matrix: [[Int]]?
 
+          @available(macOS 14.0, iOS 17.0, watchOS 10.0, tvOS 17.0, *)
           static var schema: some JSONSchemaComponent<NestedArrays> {
             JSONSchema(NestedArrays.init) {
               JSONObject {

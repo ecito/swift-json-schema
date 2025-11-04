@@ -20,6 +20,7 @@ import Testing
           case fahrenheit
 
           @available(macOS 14.0, iOS 17.0, watchOS 10.0, tvOS 17.0, *)
+          @available(macOS 14.0, iOS 17.0, watchOS 10.0, tvOS 17.0, *)
           static var schema: some JSONSchemaComponent<TemperatureKind> {
             JSONString()
               .enumValues {
@@ -60,6 +61,7 @@ import Testing
           case cloudy(coverage: Double)
           case rainy(chanceOfRain: Double, amount: Double)
 
+          @available(macOS 14.0, iOS 17.0, watchOS 10.0, tvOS 17.0, *)
           @available(macOS 14.0, iOS 17.0, watchOS 10.0, tvOS 17.0, *)
           static var schema: some JSONSchemaComponent<TemperatureKind> {
             JSONComposition.OneOf(into: TemperatureKind.self) {
@@ -120,6 +122,7 @@ import Testing
           case cloudy(Double)
           case rainy(Double, Double)
 
+          @available(macOS 14.0, iOS 17.0, watchOS 10.0, tvOS 17.0, *)
           @available(macOS 14.0, iOS 17.0, watchOS 10.0, tvOS 17.0, *)
           static var schema: some JSONSchemaComponent<TemperatureKind> {
             JSONComposition.OneOf(into: TemperatureKind.self) {
@@ -186,6 +189,7 @@ import Testing
           case windy
           case stormy
 
+          @available(macOS 14.0, iOS 17.0, watchOS 10.0, tvOS 17.0, *)
           @available(macOS 14.0, iOS 17.0, watchOS 10.0, tvOS 17.0, *)
           static var schema: some JSONSchemaComponent<TemperatureKind> {
             JSONComposition.OneOf(into: TemperatureKind.self) {
@@ -267,6 +271,7 @@ import Testing
           case preferredLanguages([String])
           case contactInfo([String: String])
 
+          @available(macOS 14.0, iOS 17.0, watchOS 10.0, tvOS 17.0, *)
           @available(macOS 14.0, iOS 17.0, watchOS 10.0, tvOS 17.0, *)
           static var schema: some JSONSchemaComponent<UserProfileSetting> {
             JSONComposition.OneOf(into: UserProfileSetting.self) {
@@ -362,6 +367,7 @@ import Testing
           case arrivalDetails(city: String = "Unknown")
           case passengerInfo(name: String = "Unknown", seatNumber: String? = nil)
 
+          @available(macOS 14.0, iOS 17.0, watchOS 10.0, tvOS 17.0, *)
           @available(macOS 14.0, iOS 17.0, watchOS 10.0, tvOS 17.0, *)
           static var schema: some JSONSchemaComponent<FlightInfo> {
             JSONComposition.OneOf(into: FlightInfo.self) {
@@ -464,6 +470,7 @@ import Testing
           case fiction, nonFiction, science, history, kids, entertainment
 
           @available(macOS 14.0, iOS 17.0, watchOS 10.0, tvOS 17.0, *)
+          @available(macOS 14.0, iOS 17.0, watchOS 10.0, tvOS 17.0, *)
           static var schema: some JSONSchemaComponent<Category> {
             JSONString()
               .enumValues {
@@ -499,6 +506,7 @@ import Testing
           case movie(details: ItemDetails, category: Category, duration: Int)
           case music(details: ItemDetails, category: Category)
 
+          @available(macOS 14.0, iOS 17.0, watchOS 10.0, tvOS 17.0, *)
           @available(macOS 14.0, iOS 17.0, watchOS 10.0, tvOS 17.0, *)
           static var schema: some JSONSchemaComponent<LibraryItem> {
             JSONComposition.OneOf(into: LibraryItem.self) {
@@ -635,6 +643,7 @@ import Testing
           )
 
           @available(macOS 14.0, iOS 17.0, watchOS 10.0, tvOS 17.0, *)
+          @available(macOS 14.0, iOS 17.0, watchOS 10.0, tvOS 17.0, *)
           static var schema: some JSONSchemaComponent<Configuration> {
             JSONComposition.OneOf(into: Configuration.self) {
               JSONObject {
@@ -683,6 +692,7 @@ import Testing
             port: Int
           )
 
+          @available(macOS 14.0, iOS 17.0, watchOS 10.0, tvOS 17.0, *)
           @available(macOS 14.0, iOS 17.0, watchOS 10.0, tvOS 17.0, *)
           static var schema: some JSONSchemaComponent<MixedConfig> {
             JSONComposition.OneOf(into: MixedConfig.self) {
