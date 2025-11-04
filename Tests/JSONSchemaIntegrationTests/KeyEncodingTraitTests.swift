@@ -22,179 +22,179 @@ import Testing
 
 #if SnakeCase
 
-// When the SnakeCase trait is enabled, all @Schemable types use snake_case by default
-@Schemable
-struct TraitSnakeCaseUser {
-  let firstName: String
-  let lastName: String
-  let emailAddress: String
-}
-
-// Explicit override still works
-@Schemable(keyStrategy: .kebabCase)
-struct TraitSnakeCaseOverriddenUser {
-  let firstName: String
-  let lastName: String
-}
-
-struct KeyEncodingSnakeCaseTraitTests {
-  @Test(.snapshots(record: false)) func traitSnakeCaseDefault() {
-    let schema = TraitSnakeCaseUser.schema.schemaValue
-    assertInlineSnapshot(of: schema, as: .json) {
-      #"""
-      {
-        "properties" : {
-          "email_address" : {
-            "type" : "string"
-          },
-          "first_name" : {
-            "type" : "string"
-          },
-          "last_name" : {
-            "type" : "string"
-          }
-        },
-        "required" : [
-          "first_name",
-          "last_name",
-          "email_address"
-        ],
-        "type" : "object"
-      }
-      """#
-    }
+  // When the SnakeCase trait is enabled, all @Schemable types use snake_case by default
+  @Schemable
+  struct TraitSnakeCaseUser {
+    let firstName: String
+    let lastName: String
+    let emailAddress: String
   }
 
-  @Test(.snapshots(record: false)) func traitSnakeCaseExplicitOverride() {
-    let schema = TraitSnakeCaseOverriddenUser.schema.schemaValue
-    assertInlineSnapshot(of: schema, as: .json) {
-      #"""
-      {
-        "properties" : {
-          "first-name" : {
-            "type" : "string"
+  // Explicit override still works
+  @Schemable(keyStrategy: .kebabCase)
+  struct TraitSnakeCaseOverriddenUser {
+    let firstName: String
+    let lastName: String
+  }
+
+  struct KeyEncodingSnakeCaseTraitTests {
+    @Test(.snapshots(record: false)) func traitSnakeCaseDefault() {
+      let schema = TraitSnakeCaseUser.schema.schemaValue
+      assertInlineSnapshot(of: schema, as: .json) {
+        #"""
+        {
+          "properties" : {
+            "email_address" : {
+              "type" : "string"
+            },
+            "first_name" : {
+              "type" : "string"
+            },
+            "last_name" : {
+              "type" : "string"
+            }
           },
-          "last-name" : {
-            "type" : "string"
-          }
-        },
-        "required" : [
-          "first-name",
-          "last-name"
-        ],
-        "type" : "object"
+          "required" : [
+            "first_name",
+            "last_name",
+            "email_address"
+          ],
+          "type" : "object"
+        }
+        """#
       }
-      """#
+    }
+
+    @Test(.snapshots(record: false)) func traitSnakeCaseExplicitOverride() {
+      let schema = TraitSnakeCaseOverriddenUser.schema.schemaValue
+      assertInlineSnapshot(of: schema, as: .json) {
+        #"""
+        {
+          "properties" : {
+            "first-name" : {
+              "type" : "string"
+            },
+            "last-name" : {
+              "type" : "string"
+            }
+          },
+          "required" : [
+            "first-name",
+            "last-name"
+          ],
+          "type" : "object"
+        }
+        """#
+      }
     }
   }
-}
 
 #elseif KebabCase
 
-// When the KebabCase trait is enabled, all @Schemable types use kebab-case by default
-@Schemable
-struct TraitKebabCaseUser {
-  let firstName: String
-  let lastName: String
-  let emailAddress: String
-}
-
-// Explicit override still works
-@Schemable(keyStrategy: .snakeCase)
-struct TraitKebabCaseOverriddenUser {
-  let firstName: String
-  let lastName: String
-}
-
-struct KeyEncodingKebabCaseTraitTests {
-  @Test(.snapshots(record: false)) func traitKebabCaseDefault() {
-    let schema = TraitKebabCaseUser.schema.schemaValue
-    assertInlineSnapshot(of: schema, as: .json) {
-      #"""
-      {
-        "properties" : {
-          "email-address" : {
-            "type" : "string"
-          },
-          "first-name" : {
-            "type" : "string"
-          },
-          "last-name" : {
-            "type" : "string"
-          }
-        },
-        "required" : [
-          "first-name",
-          "last-name",
-          "email-address"
-        ],
-        "type" : "object"
-      }
-      """#
-    }
+  // When the KebabCase trait is enabled, all @Schemable types use kebab-case by default
+  @Schemable
+  struct TraitKebabCaseUser {
+    let firstName: String
+    let lastName: String
+    let emailAddress: String
   }
 
-  @Test(.snapshots(record: false)) func traitKebabCaseExplicitOverride() {
-    let schema = TraitKebabCaseOverriddenUser.schema.schemaValue
-    assertInlineSnapshot(of: schema, as: .json) {
-      #"""
-      {
-        "properties" : {
-          "first_name" : {
-            "type" : "string"
+  // Explicit override still works
+  @Schemable(keyStrategy: .snakeCase)
+  struct TraitKebabCaseOverriddenUser {
+    let firstName: String
+    let lastName: String
+  }
+
+  struct KeyEncodingKebabCaseTraitTests {
+    @Test(.snapshots(record: false)) func traitKebabCaseDefault() {
+      let schema = TraitKebabCaseUser.schema.schemaValue
+      assertInlineSnapshot(of: schema, as: .json) {
+        #"""
+        {
+          "properties" : {
+            "email-address" : {
+              "type" : "string"
+            },
+            "first-name" : {
+              "type" : "string"
+            },
+            "last-name" : {
+              "type" : "string"
+            }
           },
-          "last_name" : {
-            "type" : "string"
-          }
-        },
-        "required" : [
-          "first_name",
-          "last_name"
-        ],
-        "type" : "object"
+          "required" : [
+            "first-name",
+            "last-name",
+            "email-address"
+          ],
+          "type" : "object"
+        }
+        """#
       }
-      """#
+    }
+
+    @Test(.snapshots(record: false)) func traitKebabCaseExplicitOverride() {
+      let schema = TraitKebabCaseOverriddenUser.schema.schemaValue
+      assertInlineSnapshot(of: schema, as: .json) {
+        #"""
+        {
+          "properties" : {
+            "first_name" : {
+              "type" : "string"
+            },
+            "last_name" : {
+              "type" : "string"
+            }
+          },
+          "required" : [
+            "first_name",
+            "last_name"
+          ],
+          "type" : "object"
+        }
+        """#
+      }
     }
   }
-}
 
 #else
 
-// When neither trait is enabled, @Schemable uses identity (camelCase) by default
-@Schemable
-struct KeyEncodingTraitDisabledUser {
-  let firstName: String
-  let lastName: String
-  let emailAddress: String
-}
+  // When neither trait is enabled, @Schemable uses identity (camelCase) by default
+  @Schemable
+  struct KeyEncodingTraitDisabledUser {
+    let firstName: String
+    let lastName: String
+    let emailAddress: String
+  }
 
-struct KeyEncodingTraitDisabledTests {
-  @Test(.snapshots(record: false)) func traitDisabledIdentity() {
-    let schema = KeyEncodingTraitDisabledUser.schema.schemaValue
-    assertInlineSnapshot(of: schema, as: .json) {
-      #"""
-      {
-        "properties" : {
-          "emailAddress" : {
-            "type" : "string"
+  struct KeyEncodingTraitDisabledTests {
+    @Test(.snapshots(record: false)) func traitDisabledIdentity() {
+      let schema = KeyEncodingTraitDisabledUser.schema.schemaValue
+      assertInlineSnapshot(of: schema, as: .json) {
+        #"""
+        {
+          "properties" : {
+            "emailAddress" : {
+              "type" : "string"
+            },
+            "firstName" : {
+              "type" : "string"
+            },
+            "lastName" : {
+              "type" : "string"
+            }
           },
-          "firstName" : {
-            "type" : "string"
-          },
-          "lastName" : {
-            "type" : "string"
-          }
-        },
-        "required" : [
-          "firstName",
-          "lastName",
-          "emailAddress"
-        ],
-        "type" : "object"
+          "required" : [
+            "firstName",
+            "lastName",
+            "emailAddress"
+          ],
+          "type" : "object"
+        }
+        """#
       }
-      """#
     }
   }
-}
 
 #endif
