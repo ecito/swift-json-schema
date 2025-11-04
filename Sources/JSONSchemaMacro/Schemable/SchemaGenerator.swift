@@ -3,6 +3,16 @@ import SwiftSyntax
 import SwiftSyntaxBuilder
 import SwiftSyntaxMacros
 
+extension String {
+  /// Removes backticks from Swift identifiers (e.g., "`default`" → "default")
+  func trimmingBackticks() -> String {
+    if self.hasPrefix("`") && self.hasSuffix("`") {
+      return String(self.dropFirst().dropLast())
+    }
+    return self
+  }
+}
+
 struct EnumSchemaGenerator {
   let declModifier: DeclModifierSyntax?
   let name: TokenSyntax
@@ -73,19 +83,22 @@ struct EnumSchemaGenerator {
     let statements = casesWithoutAssociatedValues.compactMap { $0.generateSchema() }
     let statementList = CodeBlockItemListSyntax(statements, separator: .newline)
 
-    var switchCases = casesWithoutAssociatedValues.map(\.identifier)
-      .map { identifier -> SwitchCaseSyntax in
-        """
-        case \"\(identifier)\":
-          return Self.\(identifier)
+    var switchCases =
+      casesWithoutAssociatedValues
+      .map { enumCase -> SwitchCaseSyntax in
+        // Use raw value if present, otherwise use case name (without backticks)
+        let matchValue = enumCase.rawValue ?? enumCase.identifier.text.trimmingBackticks()
+        return """
+          case "\(raw: matchValue)":
+            return Self.\(enumCase.identifier)
 
-        """
+          """
       }
     switchCases.append("default: return nil")
     let switchCaseList = SwitchCaseListSyntax(switchCases.map { .switchCase($0) })
 
     return """
-      JSONString()  
+      JSONString()
         .enumValues {
           \(statementList)
         }
