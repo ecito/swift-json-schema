@@ -649,6 +649,7 @@ struct OptionalNullsExpansionTests {
         \(modifier) struct Weather {
           let temperature: Double?
 
+          @available(macOS 14.0, iOS 17.0, watchOS 10.0, tvOS 17.0, *)
           \(modifier) static var schema: some JSONSchemaComponent<Weather> {
             JSONSchema(Weather.init) {
               JSONObject {
