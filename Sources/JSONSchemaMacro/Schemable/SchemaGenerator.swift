@@ -158,6 +158,7 @@ struct SchemaGenerator {
 
   func makeSchema() -> DeclSyntax {
     let schemableMembers = members.schemableMembers()
+    let codingKeys = members.extractCodingKeys()
 
     // Emit diagnostics for potential memberwise init mismatches
     if let context = context {
@@ -179,6 +180,7 @@ struct SchemaGenerator {
         keyStrategy: keyStrategy,
         typeName: name.text,
         globalOptionalNulls: optionalNulls,
+        codingKeys: codingKeys,
         context: context
       )
     }

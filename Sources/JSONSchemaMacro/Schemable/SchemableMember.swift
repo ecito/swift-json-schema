@@ -49,6 +49,7 @@ struct SchemableMember {
     )
   }
 
+<<<<<<< HEAD
   /// Validates schema options and emits diagnostics for invalid configurations
   func validateOptions(context: any MacroExpansionContext) {
     let diagnostics = SchemaOptionsDiagnostics(
@@ -79,6 +80,7 @@ struct SchemableMember {
     keyStrategy: ExprSyntax?,
     typeName: String,
     globalOptionalNulls: Bool = false,
+    codingKeys: [String: String]? = nil,
     context: (any MacroExpansionContext)? = nil
   ) -> CodeBlockItemSyntax? {
     var codeBlock: CodeBlockItemSyntax
@@ -195,10 +197,16 @@ struct SchemableMember {
 
     let keyExpr: ExprSyntax
     if let customKey {
+      // Custom key from @SchemaOptions(.key(...)) takes highest priority
       keyExpr = customKey
+    } else if let codingKeys, let codingKey = codingKeys[identifier.text] {
+      // CodingKeys takes priority over keyStrategy
+      keyExpr = "\"\(raw: codingKey)\""
     } else if keyStrategy != nil {
+      // keyStrategy is used if no CodingKeys or custom key
       keyExpr = "\(raw: typeName).keyEncodingStrategy.encode(\"\(raw: identifier.text)\")"
     } else {
+      // Default: use property name as-is
       keyExpr = "\"\(raw: identifier.text)\""
     }
 
