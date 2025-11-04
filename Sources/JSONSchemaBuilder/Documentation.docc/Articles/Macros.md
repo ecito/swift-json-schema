@@ -431,18 +431,50 @@ struct Weather {
 
 You can override a property's JSON key using ``SchemaOptions/key(_:)`` or apply a
 type-wide strategy by providing ``@Schemable(keyStrategy:)``. Strategies are
-represented by ``KeyEncodingStrategies`` which offers built-in ``.identity`` and
-``.snakeCase`` options but can also wrap custom types conforming to
+represented by ``KeyEncodingStrategies`` which offers built-in ``.identity``,
+``.snakeCase``, and ``.kebabCase`` options but can also wrap custom types conforming to
 ``KeyEncodingStrategy``.
 
+**Per-type strategy:**
 ```swift
 @Schemable(keyStrategy: .snakeCase)
 struct Person {
-  let firstName: String
+  let firstName: String  // Becomes "first_name"
   @SchemaOptions(.key("last-name"))
-  let lastName: String
+  let lastName: String  // Custom override to "last-name"
 }
 ```
+
+**Package-level strategy (Swift 6.1+):**
+
+When using Swift 6.1 or later, you can set a default key encoding strategy for all `@Schemable` types across your entire package using the `SnakeCase` or `KebabCase` traits:
+
+```swift
+// In your Package.swift
+dependencies: [
+  .package(url: "https://github.com/ajevans99/swift-json-schema.git", from: "0.15.0",
+           traits: [.init(name: "SnakeCase")])  // or "KebabCase"
+]
+```
+
+With a trait enabled, all `@Schemable` types automatically use that encoding strategy:
+
+```swift
+// When SnakeCase trait is enabled:
+@Schemable
+struct Person {
+  let firstName: String  // Automatically becomes "first_name"
+  let lastName: String   // Automatically becomes "last_name"
+}
+
+// You can still override per-type:
+@Schemable(keyStrategy: .kebabCase)
+struct Product {
+  let productName: String  // Uses "product-name" instead
+}
+```
+
+**Important:** The `SnakeCase` and `KebabCase` traits are mutually exclusive. Enabling both simultaneously will result in a compile-time error.
 
 #### Optional properties and null values
 
@@ -476,3 +508,36 @@ The `.orNull()` modifier supports two styles:
 - `.union`: Uses oneOf composition - required for complex types (objects, arrays)
 
 When using the global `optionalNulls` flag, the appropriate style is automatically selected based on the property type.
+
+**Package-level opt-in (Swift 6.0+):**
+
+When using Swift 6.0 or later, you can enable null acceptance for all optional properties across your entire package using the `OptionalNulls` trait:
+
+```swift
+// In your Package.swift
+dependencies: [
+  .package(url: "https://github.com/ajevans99/swift-json-schema.git", from: "0.15.0",
+           traits: [.init(name: "OptionalNulls")])
+]
+```
+
+With this trait enabled, all `@Schemable` types will behave as if `optionalNulls: true` was specified, eliminating the need to add the parameter to every type definition:
+
+```swift
+// When OptionalNulls trait is enabled:
+@Schemable
+struct User {
+  let name: String
+  let age: Int?      // Automatically accepts null
+  let email: String? // Automatically accepts null
+}
+
+// You can still override per-type:
+@Schemable(optionalNulls: false)
+struct StrictUser {
+  let name: String
+  let age: Int?      // Does NOT accept null
+}
+```
+
+This is particularly useful for projects that consistently want to accept explicit `null` values for optional properties without having to specify `optionalNulls: true` on every type.
