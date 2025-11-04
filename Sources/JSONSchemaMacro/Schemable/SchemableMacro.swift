@@ -85,15 +85,36 @@ public struct SchemableMacro: MemberMacro, ExtensionMacro {
     conformingTo protocols: [TypeSyntax],
     in context: some MacroExpansionContext
   ) throws -> [DeclSyntax] {
+    // Compile-time check for mutually exclusive key encoding traits
+    #if SnakeCase && KebabCase
+    #error("Cannot enable both SnakeCase and KebabCase traits simultaneously. These traits are mutually exclusive.")
+    #endif
+
     // Get the effective access level (considering enclosing extensions)
     let accessLevel = effectiveAccessLevel(from: declaration, context: context)
     let accessModifier = accessLevel.map { "\($0) " } ?? ""
 
     if let structDecl = declaration.as(StructDeclSyntax.self) {
       let arguments = node.arguments?.as(LabeledExprListSyntax.self)
-      let strategyArg = arguments?.first(where: { $0.label?.text == "keyStrategy" })?.expression
+      let explicitStrategyArg = arguments?.first(where: { $0.label?.text == "keyStrategy" })?.expression
       let optionalNullsArg = arguments?.first(where: { $0.label?.text == "optionalNulls" })?
         .expression
+
+      // Determine effective key strategy (trait-based or explicit)
+      let strategyArg: ExprSyntax?
+      if let explicitStrategyArg {
+        // Explicit strategy takes precedence
+        strategyArg = explicitStrategyArg
+      } else {
+        // Check for trait-based strategies
+        #if SnakeCase
+        strategyArg = ".snakeCase" as ExprSyntax
+        #elseif KebabCase
+        strategyArg = ".kebabCase" as ExprSyntax
+        #else
+        strategyArg = nil
+        #endif
+      }
 
       // Check for explicit optionalNulls argument
       let explicitOptionalNulls =
@@ -122,9 +143,25 @@ public struct SchemableMacro: MemberMacro, ExtensionMacro {
       return decls
     } else if let classDecl = declaration.as(ClassDeclSyntax.self) {
       let arguments = node.arguments?.as(LabeledExprListSyntax.self)
-      let strategyArg = arguments?.first(where: { $0.label?.text == "keyStrategy" })?.expression
+      let explicitStrategyArg = arguments?.first(where: { $0.label?.text == "keyStrategy" })?.expression
       let optionalNullsArg = arguments?.first(where: { $0.label?.text == "optionalNulls" })?
         .expression
+
+      // Determine effective key strategy (trait-based or explicit)
+      let strategyArg: ExprSyntax?
+      if let explicitStrategyArg {
+        // Explicit strategy takes precedence
+        strategyArg = explicitStrategyArg
+      } else {
+        // Check for trait-based strategies
+        #if SnakeCase
+        strategyArg = ".snakeCase" as ExprSyntax
+        #elseif KebabCase
+        strategyArg = ".kebabCase" as ExprSyntax
+        #else
+        strategyArg = nil
+        #endif
+      }
 
       // Check for explicit optionalNulls argument
       let explicitOptionalNulls =
@@ -152,10 +189,25 @@ public struct SchemableMacro: MemberMacro, ExtensionMacro {
       }
       return decls
     } else if let enumDecl = declaration.as(EnumDeclSyntax.self) {
-      let strategyArg = node.arguments?
-        .as(LabeledExprListSyntax.self)?
-        .first(where: { $0.label?.text == "keyStrategy" })?
-        .expression
+      let arguments = node.arguments?.as(LabeledExprListSyntax.self)
+      let explicitStrategyArg = arguments?.first(where: { $0.label?.text == "keyStrategy" })?.expression
+
+      // Determine effective key strategy (trait-based or explicit)
+      let strategyArg: ExprSyntax?
+      if let explicitStrategyArg {
+        // Explicit strategy takes precedence
+        strategyArg = explicitStrategyArg
+      } else {
+        // Check for trait-based strategies
+        #if SnakeCase
+        strategyArg = ".snakeCase" as ExprSyntax
+        #elseif KebabCase
+        strategyArg = ".kebabCase" as ExprSyntax
+        #else
+        strategyArg = nil
+        #endif
+      }
+
       let generator = EnumSchemaGenerator(fromEnum: enumDecl, accessLevel: accessLevel)
       let schemaDecl = generator.makeSchema()
       var decls: [DeclSyntax] = [schemaDecl]

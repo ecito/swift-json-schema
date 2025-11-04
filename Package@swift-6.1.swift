@@ -35,6 +35,14 @@ let package = Package(
     .trait(
       name: "OptionalNulls",
       description: "Enable automatic null acceptance for all optional properties in @Schemable types"
+    ),
+    .trait(
+      name: "SnakeCase",
+      description: "Use snake_case key encoding for all @Schemable types by default"
+    ),
+    .trait(
+      name: "KebabCase",
+      description: "Use kebab-case key encoding for all @Schemable types by default"
     )
   ],
   dependencies: [
