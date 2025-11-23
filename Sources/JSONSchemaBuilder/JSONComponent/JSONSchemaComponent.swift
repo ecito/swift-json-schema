@@ -14,6 +14,38 @@ public protocol JSONSchemaComponent<Output> {
 }
 
 extension JSONSchemaComponent {
+  @available(macOS 14.0, iOS 17.0, watchOS 10.0, tvOS 17.0, *)
+  public func definition(
+    context: Context = .init(dialect: .draft2020_12),
+    deduplicate: Bool = true
+  ) -> Schema {
+    do {
+      let rawSchema = deduplicate
+        ? SchemaDeduplicator.deduplicate(schemaValue.value)
+        : schemaValue.value
+
+      return try Schema(
+        rawSchema: rawSchema,
+        location: .init(),
+        context: context
+      )
+    } catch {
+      // If schema construction fails (e.g., vocabulary issues), fall back to a false schema.
+      // This conservative default maintains previous behavior.
+      return BooleanSchema(
+        schemaValue: false,
+        location: .init(),
+        context: context
+      )
+      .asSchema()
+    }
+  }
+
+  // Keep the old signature for backwards compatibility on older platforms
+  @available(macOS, obsoleted: 14.0)
+  @available(iOS, obsoleted: 17.0)
+  @available(watchOS, obsoleted: 10.0)
+  @available(tvOS, obsoleted: 17.0)
   public func definition(context: Context = .init(dialect: .draft2020_12)) -> Schema {
     do {
       return try Schema(
@@ -22,8 +54,6 @@ extension JSONSchemaComponent {
         context: context
       )
     } catch {
-      // If schema construction fails (e.g., vocabulary issues), fall back to a false schema.
-      // This conservative default maintains previous behavior.
       return BooleanSchema(
         schemaValue: false,
         location: .init(),

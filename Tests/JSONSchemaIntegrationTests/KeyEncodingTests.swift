@@ -33,6 +33,7 @@ struct KeyEncodingTests {
           "first_name",
           "last_name"
         ],
+        "title" : "SnakePerson",
         "type" : "object"
       }
       """#
@@ -56,6 +57,7 @@ struct KeyEncodingTests {
           "first_name",
           "lastName"
         ],
+        "title" : "CustomKeyPerson",
         "type" : "object"
       }
       """#

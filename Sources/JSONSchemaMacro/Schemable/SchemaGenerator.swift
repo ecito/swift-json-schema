@@ -233,6 +233,12 @@ struct SchemaGenerator {
       )
     }
 
+    // Add title for better deduplication naming
+    codeBlockItem = """
+      \(codeBlockItem)
+      .title("\(raw: name.text)")
+      """
+
     if usesSelfReference {
       codeBlockItem = """
         \(codeBlockItem)

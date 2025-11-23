@@ -1,3 +1,4 @@
+import Foundation
 import JSONSchema
 import JSONSchemaBuilder
 import Testing
